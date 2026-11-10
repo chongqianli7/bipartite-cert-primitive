@@ -1,0 +1,262 @@
+{
+  "network": "Stable Studionet",
+  "chainId": 61999,
+  "rpcUrl": "https://studio.genlayer.com/api",
+  "contractAddress": "0x08Ed7437E448c8286E4EEFA6a8b210232d42E97a",
+  "deployTxHash": "0xe0106269a3788a8843a0eb97026d9e4df2141406c7cb6a35cabbbad1aa4f4f10",
+  "contractFile": "contracts/bipartite_cert.py",
+  "contractSha256": "eff537792048b4330ef7d6b7c0aa7ae678d0c6523faaa116b89ff7dd3d34c238",
+  "deployedCodeSha256": "eff537792048b4330ef7d6b7c0aa7ae678d0c6523faaa116b89ff7dd3d34c238",
+  "deployedCodeMatchesSource": true,
+  "accounts": {
+    "creator": "0x1A574fA87Cc77fB966EBAC451CE5BAAfD1595ffc"
+  },
+  "funding": {
+    "creator": {
+      "address": "0x1A574fA87Cc77fB966EBAC451CE5BAAfD1595ffc",
+      "funded_gen": 100,
+      "fundTx": "0x10fe81a4e2c8e19497d6a8d1b16e66a925f43e88b40ee3fe1878a369863e5103",
+      "balance_after_wei": "100000000000000000000"
+    }
+  },
+  "cases": [
+    {
+      "id": "good-square",
+      "nodes": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ]
+      ],
+      "coloring": [
+        0,
+        1,
+        0,
+        1
+      ],
+      "expected_verdict": "BIPARTITE_OK",
+      "expected_edge_results": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "expected_witness": null,
+      "createTxHash": "0x5838c8446610f8ad9f7dca4374595c67a7947a08d83d9196689a1964ce7bacb0"
+    },
+    {
+      "id": "bad-path",
+      "nodes": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ]
+      ],
+      "coloring": [
+        0,
+        1,
+        1,
+        0
+      ],
+      "expected_verdict": "CONFLICT",
+      "expected_edge_results": [
+        true,
+        false,
+        true
+      ],
+      "expected_witness": {
+        "edge_index": 1,
+        "u": 1,
+        "v": 2,
+        "node_u": "b",
+        "node_v": "c",
+        "color": 1
+      },
+      "createTxHash": "0x7bc0693b6547fd119fb05ac110cd69ca9117b77db80fd6da495e74c83dedb157"
+    }
+  ],
+  "transactions": [
+    {
+      "label": "create-good-square",
+      "method": "create_case",
+      "args": [
+        "good-square",
+        "[\"a\",\"b\",\"c\",\"d\"]",
+        "[[0,1],[1,2],[2,3],[3,0]]",
+        "[0,1,0,1]"
+      ],
+      "sender": "0x1A574fA87Cc77fB966EBAC451CE5BAAfD1595ffc",
+      "txHash": "0x5838c8446610f8ad9f7dca4374595c67a7947a08d83d9196689a1964ce7bacb0",
+      "receiptStatus": "FINALIZED",
+      "consensus": "MAJORITY_AGREE",
+      "execution": "SUCCESS",
+      "expected_error": null,
+      "stderr_excerpt": "{\"edge_results\":[true,true,true,true],\"first_conflict_edge_index\":-1,\"id\":\"good-square\",\"state\":\"DECIDED\",\"verdict\":\"BIPARTITE_OK\",\"witness\":null}"
+    },
+    {
+      "label": "create-bad-path",
+      "method": "create_case",
+      "args": [
+        "bad-path",
+        "[\"a\",\"b\",\"c\",\"d\"]",
+        "[[0,1],[1,2],[2,3]]",
+        "[0,1,1,0]"
+      ],
+      "sender": "0x1A574fA87Cc77fB966EBAC451CE5BAAfD1595ffc",
+      "txHash": "0x7bc0693b6547fd119fb05ac110cd69ca9117b77db80fd6da495e74c83dedb157",
+      "receiptStatus": "FINALIZED",
+      "consensus": "MAJORITY_AGREE",
+      "execution": "SUCCESS",
+      "expected_error": null,
+      "stderr_excerpt": "{\"edge_results\":[true,false,true],\"first_conflict_edge_index\":1,\"id\":\"bad-path\",\"state\":\"DECIDED\",\"verdict\":\"CONFLICT\",\"witness\":{\"color\":1,\"edge_index\":1,\"node_u\":\"b\",\"node_v\":\"c\",\"u\":1,\"v\":2}}"
+    },
+    {
+      "label": "duplicate-create-good-square",
+      "method": "create_case",
+      "args": [
+        "good-square",
+        "[\"a\",\"b\",\"c\",\"d\"]",
+        "[[0,1],[1,2],[2,3],[3,0]]",
+        "[0,1,0,1]"
+      ],
+      "sender": "0xf24808b464f7cE7973e996Ad7dbF955aac25bCAa",
+      "txHash": "0x2269f54f22726eb86096761867ca613620f9c24702c9452b69e3e26125e777dc",
+      "receiptStatus": "FINALIZED",
+      "consensus": "MAJORITY_AGREE",
+      "execution": "ERROR",
+      "expected_error": "ALREADY_EXISTS",
+      "stderr_excerpt": "EXPECTED: ALREADY_EXISTS"
+    }
+  ],
+  "finalReadbacks": {
+    "cases": [
+      {
+        "coloring": [
+          0,
+          1,
+          0,
+          1
+        ],
+        "edge_results": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            0
+          ]
+        ],
+        "first_conflict_edge_index": -1,
+        "id": "good-square",
+        "nodes": [
+          "a",
+          "b",
+          "c",
+          "d"
+        ],
+        "state": "DECIDED",
+        "verdict": "BIPARTITE_OK",
+        "witness": null
+      },
+      {
+        "coloring": [
+          0,
+          1,
+          1,
+          0
+        ],
+        "edge_results": [
+          true,
+          false,
+          true
+        ],
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ]
+        ],
+        "first_conflict_edge_index": 1,
+        "id": "bad-path",
+        "nodes": [
+          "a",
+          "b",
+          "c",
+          "d"
+        ],
+        "state": "DECIDED",
+        "verdict": "CONFLICT",
+        "witness": {
+          "color": 1,
+          "edge_index": 1,
+          "node_u": "b",
+          "node_v": "c",
+          "u": 1,
+          "v": 2
+        }
+      }
+    ],
+    "stats": {
+      "conflict_cases": 1,
+      "ok_cases": 1,
+      "total_cases": 2
+    },
+    "readBackAt": "2026-11-10T16:29:34.316Z"
+  },
+  "generatedAt": "2026-11-10T16:29:34.316Z"
+}
